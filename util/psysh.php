@@ -6,16 +6,14 @@ use App\Environment;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LogLevel;
 
-$autoloader = require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-$di = App\AppFactory::buildContainer($autoloader,
+$app = App\AppFactory::createApp(
     [
-        App\Environment::BASE_DIR => dirname(__DIR__),
         App\Environment::LOG_LEVEL => LogLevel::DEBUG,
     ]
 );
-
-$app = App\AppFactory::buildAppFromContainer($di);
+$di = $app->getContainer();
 
 $env = $di->get(Environment::class);
 App\Enums\SupportedLocales::createForCli($env);
